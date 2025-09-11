@@ -9,6 +9,7 @@ const ErrorHandler = require("../utils/ErrorHandler"); // ✅ Make sure this is 
 const sendMail = require("../utils/sendmail.js");
 const catchAsyncError = require("../middleware/catchAsyncError.js");
 const sendToken = require("../utils/jwttoken.js");
+const { isAuthenticated } = require("../middleware/auth");
 require("dotenv").config();
 
 router.post("/create-user", upload.single("file"), async (req, res, next) => {
@@ -38,7 +39,7 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
 
 
         const filename = req.file.filename;
-        const filePath = "uploads/" + filename;
+        const filePath = "/" + filename;
         const user = {
             name,
             email,
@@ -145,7 +146,7 @@ router.post("/login-user", catchAsyncError(async (req, res, next) => {
 })
 );
 //get user
-router.get("/getUser", catchAsyncError(async (req, res, next) => {
+router.get("/getUser", isAuthenticated, catchAsyncError(async (req, res, next) => {
     try {
         const user = await User.findById(req.user._id).select("-password");
         if (!user) {

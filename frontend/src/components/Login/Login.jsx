@@ -6,6 +6,7 @@ import axios from "axios";
 import { server } from "../../server";
 import { toast } from "react-toastify";
 
+
 const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -26,6 +27,9 @@ const Login = () => {
       )
       .then((res) => {
         toast.success("Login Success!");
+        console.log("RESPONSE: "+res);
+        
+        
         navigate("/");
         window.location.reload(true); 
       })

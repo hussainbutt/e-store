@@ -6,40 +6,65 @@ import {
   SignupPage,
   ActivationPage,
   HomePage,
+  ProductPage,
+  BestSellingPage,
+  EventPage,
+  FAQPage,
 } from "./routes/Routes.js";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Store from "./redux/store";
-
+import { useDispatch, useSelector } from "react-redux";
+import { loadUser } from "./redux/actions/user";
 const App = () => {
+  
+  const dispatch = useDispatch();
+  const { loading, isAuthenticated, user } = useSelector((state) => state.user);
 
+  useEffect(() => {
+    dispatch(loadUser());
+  }, []);
+
+  useEffect(() => {
+    console.log('auth:', isAuthenticated, 'user:', user, 'loading:', loading);
+  }, [isAuthenticated, user, loading]);
   
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/sign-up" element={<SignupPage />} />
-        <Route
-          path="/activation/:activation_token"
-          element={<ActivationPage />}
-        />
-        </Routes>
-      <ToastContainer
-        position="bottom-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />
-    </BrowserRouter>
+    <>
+      {loading ? (
+        <h1>Loading...</h1>
+      ) : (
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/sign-up" element={<SignupPage />} />
+            <Route
+              path="/activation/:activation_token"
+              element={<ActivationPage />}
+            />
+            <Route path="/products" element={<ProductPage />} />
+            <Route path="/best-selling" element={<BestSellingPage />} />
+            <Route path="/events" element={<EventPage />} />
+            <Route path="/faq" element={<FAQPage />} />
+          </Routes>
+          <ToastContainer
+            position="bottom-center"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="dark"
+          />
+        </BrowserRouter>
+      )}
+    </>
   );
 };
 

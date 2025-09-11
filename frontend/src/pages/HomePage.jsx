@@ -8,6 +8,7 @@ import Events from '../components/Route/Events/Events.jsx';
 import Sponsored from '../components/Route/Sponsored/Sponsored.jsx';
 import Footer from '../components/Layout/Footer.jsx';
 const HomePage = () => {
+  
   return (
     <div>
         <Header activeHeading={1} />

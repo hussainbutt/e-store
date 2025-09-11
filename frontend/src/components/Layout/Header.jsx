@@ -16,9 +16,12 @@ import { useSelector } from "react-redux";
 import Cart from "../cart/Cart.jsx";
 import Wishlist from "../Wishlist/Wishlist.jsx";
 import { RxCross1 } from "react-icons/rx";
+import { backendUrl } from "../../server";
 
 const Header = ({ activeHeading }) => {
-  const { isAuthenticated, user } = useSelector((state) => state.user);
+  const { isAuthenticated, user} = useSelector((state) => state.user);
+  console.log("user is: "+user);
+
   const { isSeller } = false;
   const { wishlist } = {};
   const { cart } = {};
@@ -175,7 +178,7 @@ const Header = ({ activeHeading }) => {
                 {isAuthenticated ? (
                   <Link to="/profile">
                     <img
-                      src={`${user?.avatar?.url}`}
+                      src={`${backendUrl}/${user.avatar.url}`}
                       className="w-[35px] h-[35px] rounded-full"
                       alt=""
                     />
@@ -314,7 +317,7 @@ const Header = ({ activeHeading }) => {
                   <div>
                     <Link to="/profile">
                       <img
-                        src={`${user.avatar?.url}`}
+                        src={`${backendUrl}${user.avatar?.url}`}
                         alt=""
                         className="w-[60px] h-[60px] rounded-full border-[3px] border-[#0eae88]"
                       />
@@ -343,6 +346,7 @@ const Header = ({ activeHeading }) => {
       </div>
     </>
   );
+  
 };
 
 export default Header;
