@@ -10,7 +10,7 @@ const LoginPage = () => {
   useEffect(() => {
     if(isAuthenticated === true){
       navigate("/");
-      window.location.reload();
+      window.location.reload(true);
     }
   }, [])
   

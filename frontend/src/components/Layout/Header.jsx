@@ -20,8 +20,6 @@ import { backendUrl } from "../../server";
 
 const Header = ({ activeHeading }) => {
   const { isAuthenticated, user} = useSelector((state) => state.user);
-  console.log("user is: "+user);
-
   const { isSeller } = false;
   const { wishlist } = {};
   const { cart } = {};
@@ -30,7 +28,7 @@ const Header = ({ activeHeading }) => {
   const [searchData, setSearchData] = useState(null);
   const [active, setActive] = useState(false);
   const [dropDown, setDropDown] = useState(false);
-  const [openCart, setOpenCart] = useState(false);
+  const [openCart,setOpenCart] = useState(false);
   const [openWishlist, setOpenWishlist] = useState(false);
   const [open, setOpen] = useState(false);
 
