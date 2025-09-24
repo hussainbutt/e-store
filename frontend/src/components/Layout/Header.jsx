@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "../../styles/styles";
 import { categoriesData, productData } from "../../static/data";
@@ -23,7 +23,7 @@ const Header = ({ activeHeading }) => {
   const { isSeller } = false;
   const { wishlist } = {};
   const { cart } = {};
-  const { allProducts } = {};
+  // const {allProducts} = productData;
   const [searchTerm, setSearchTerm] = useState("");
   const [searchData, setSearchData] = useState(null);
   const [active, setActive] = useState(false);
@@ -35,15 +35,17 @@ const Header = ({ activeHeading }) => {
   const handleSearchChange = (e) => {
     const term = e.target.value;
     setSearchTerm(term);
-
     const filteredProducts =
-      allProducts &&
-      allProducts.filter((product) =>
+      productData &&
+      productData.filter((product) =>
         product.name.toLowerCase().includes(term.toLowerCase())
       );
     setSearchData(filteredProducts);
   };
-
+  // useEffect(() => {
+  //   console.log("all products: "+ productData);
+    
+  // }, [allProducts]);
   window.addEventListener("scroll", () => {
     if (window.scrollY > 70) {
       setActive(true);
@@ -85,7 +87,7 @@ const Header = ({ activeHeading }) => {
                       <Link to={`/product/${i._id}`}>
                         <div className="w-full flex items-start-py-3">
                           <img
-                            src={`${i.images[0]?.url}`}
+                            src={`${i.image_Url[0]?.url}`}
                             alt=""
                             className="w-[40px] h-[40px] mr-[10px]"
                           />

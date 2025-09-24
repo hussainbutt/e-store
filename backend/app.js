@@ -4,6 +4,7 @@ const ErrorHandler = require("./middleware/error");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const shop = require("./controller/shop");
 
 // Middleware
 app.use(express.json());
@@ -24,6 +25,7 @@ if (process.env.NODE_ENV !== "PRODUCTION") {
 const user = require("./controller/user");
 const error = require("./middleware/error");
 app.use("/api/v2/user", user);
+app.use("/api/v2/shop", shop);
 
 // Error handling middleware
 app.use(error);

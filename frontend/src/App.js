@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
+import ProtectedRoute from "./ProtectedRoute.js";
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {
   LoginPage,
@@ -11,7 +13,8 @@ import {
   EventPage,
   FAQPage,
   ProductDetailsPage,
-  ProfilePage
+  ProfilePage,
+  ShopCreatePage
   
 } from "./routes/Routes.js";
 
@@ -25,6 +28,7 @@ const App = () => {
   const dispatch = useDispatch();
   const { loading, isAuthenticated, user } = useSelector((state) => state.user);
 
+  
   useEffect(() => {
     dispatch(loadUser());
   }, []);
@@ -53,7 +57,12 @@ const App = () => {
             <Route path="/best-selling" element={<BestSellingPage />} />
             <Route path="/events" element={<EventPage />} />
             <Route path="/faq" element={<FAQPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
+
+            <Route path="/profile" element={<ProtectedRoute isAuthenticated>
+              <ProfilePage />
+            </ProtectedRoute>} />
+            <Route path="/shop-create" element={<ShopCreatePage />} />
+            
             
           </Routes>
           <ToastContainer

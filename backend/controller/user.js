@@ -55,7 +55,7 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
             await sendMail(
                 {
                     email: user.email,
-                    subject: "E-Shop - Account Activation",
+                    subject: "E-Shop - Shop Activation",
                     message: `Hello ${user.name},\n\nPlease click on the link below to activate your account:\n\n${activationUrl}\n\nThank you!`
                 })
             res.json({
@@ -75,8 +75,6 @@ router.post("/create-user", upload.single("file"), async (req, res, next) => {
 });
 
 const createActivationToken = (user) => {
-    console.log("ACTIVATION_SECRET:", process.env.ACTIVATION_SECRET);
-
     return jwt.sign(user, process.env.ACTIVATION_SECRET, {
         expiresIn: "5m",
     })
@@ -85,10 +83,7 @@ const createActivationToken = (user) => {
 //active user 
 router.post("/activation", catchAsyncError(async (req, res, next) => {
     try {
-        console.log("ACTIVATION_SECRET:", process.env.ACTIVATION_SECRET);
         const { activation_token } = req.body;
-        console.log("Activation token received:", activation_token);
-
         const newUser = jwt.verify(activation_token, process.env.ACTIVATION_SECRET);
         if (!newUser) {
             return next(new ErrorHandler("Invalid activation token", 400));
@@ -104,8 +99,6 @@ router.post("/activation", catchAsyncError(async (req, res, next) => {
             avatar,
             password,
         });
-        console.log("sending token");
-
         sendToken(user, 201, res);
 
 
@@ -161,5 +154,20 @@ router.get("/getUser", isAuthenticated, catchAsyncError(async (req, res, next) =
     }
 }));
 
+//logout user
+router.get("/logout", isAuthenticated, catchAsyncError(async (req, res, next) => {
+    try {
+        res.cookie("token", null, {
+            expires: new Date(Date.now()),
+            httpOnly: true,
+        });
+        res.status(200).json({
+            success: true,
+            message: "Logged Out Successfully!",
+        });
+    } catch (error) {
+        return next(new ErrorHandler(error.message, 500));
+    } 
+}));
 
 module.exports = router;

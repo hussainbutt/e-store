@@ -24,35 +24,36 @@ function Wishlist(setOpenWishlist) {
     },
   ];
   return (
-    <div className="fixed top-0 left-0 w-full bg-[#0000004b] h-screen z-10">
-      <div className="fixed top-0 right-0 min-h-full w-[25%] bg-white flex flex-col justify-between shadow-sm">
-        <RxCross1 className="w-full flex items-center" />
+   <h1>Wishlist</h1>
+    // <div className="fixed top-0 left-0 w-full bg-[#0000004b] h-screen z-10">
+    //   <div className="fixed top-0 right-0 min-h-full w-[25%] bg-white flex flex-col justify-between shadow-sm">
+    //     <RxCross1 className="w-full flex items-center" />
         
         
           
-          <h5 className="pl-2 text-[20px] font-[500]">3 Items</h5>
-          <br />
-          <div className="w-full border-t">
-            {WishlistData &&
-              WishlistData.map((i, index) => <WishlistSingle key={index} data={i} />)}
-          </div>
-          <div>
-            {/* checkout buttons */}
-            <Link to="/checkout">
-              <div
-                className={`h-[45px] flex items-center justify-center w-[100%][bg-[#e44343] rounded-[5px]`}
-              >
-                <h1>
-                  className="text-[#fff] text-[18px] font-[600]“ Checkout Now
-                  (USD$1080)
-                </h1>
-              </div>
-            </Link>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+    //       <h5 className="pl-2 text-[20px] font-[500]">3 Items</h5>
+    //       <br />
+    //       <div className="w-full border-t">
+    //         {WishlistData &&
+    //           WishlistData.map((i, index) => <WishlistSingle key={index} data={i} />)}
+    //       </div>
+    //       <div>
+    //         {/* checkout buttons */}
+    //         <Link to="/checkout">
+    //           <div
+    //             className={`h-[45px] flex items-center justify-center w-[100%][bg-[#e44343] rounded-[5px]`}
+    //           >
+    //             <h1>
+    //               className="text-[#fff] text-[18px] font-[600]“ Checkout Now
+    //               (USD$1080)
+    //             </h1>
+    //           </div>
+    //         </Link>
+    //       </div>
+    //     </div>
+    //   </div>
+    // </div>
+  )
 }
 const WishlistSingle = ({ data }) => {
   const [value, setValue] = useState(1);
