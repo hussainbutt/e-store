@@ -8,9 +8,10 @@ const { isAuthenticated, isSeller, isAdmin } = require("../middleware/auth");
 // const cloudinary = require("cloudinary");
 const catchAsyncErrors = require("../middleware/catchAsyncError");
 const ErrorHandler = require("../utils/ErrorHandler");
-const sendShopToken = require("../utils/jwtToken");
+const sendShopToken = require("../utils/sendShopToken");
 const catchAsyncError = require("../middleware/catchAsyncError");
 const { upload } = require("../multer");
+const fs = require("fs");
 
 router.post(
   "/create-shop",
@@ -26,6 +27,10 @@ router.post(
         phoneNumber,
         zipCode,
       } = req.body;
+
+      console.log(zipCode);
+      
+
       const shopEmail = await Shop.findOne({ email });
       if (shopEmail) {
         const filename = req.file.filename;
@@ -49,10 +54,9 @@ router.post(
         phoneNumber: req.body.phoneNumber,
         zipCode: req.body.zipCode,
       };
-
       const activationToken = createActivationToken(seller);
 
-      const activationUrl = `http://localhost:3000/activation/${activationToken}`;
+      const activationUrl = `http://localhost:3000/seller/activation/${activationToken}`;
 
       try {
         await sendMail({
@@ -75,21 +79,24 @@ router.post(
 );
 
 const createActivationToken = (seller) => {
+    console.log(seller);
     return jwt.sign(seller, process.env.ACTIVATION_SECRET, {
         expiresIn: "5m",
     })
 };
 
 //activate user
-router.post("/shop/activation", catchAsyncError(async (req, res, next) => {
+router.post("/activation", catchAsyncError(async (req, res, next) => {
     try {
+        console.log("inside activation");
+        
         const { activation_token } = req.body;
 
         const newSeller = jwt.verify(activation_token, process.env.ACTIVATION_SECRET);
         if (!newSeller) {
             return next(new ErrorHandler("Invalid activation token", 400));
         }
-        const { name, email, avatar, password } = newSeller;
+        const { name, email, avatar, password,zipCode,phoneNumber,address } = newSeller;
         let seller = await Shop.findOne({ email });
         if (seller) {
             return next(new ErrorHandler("Seller account already exists", 400));
@@ -99,9 +106,12 @@ router.post("/shop/activation", catchAsyncError(async (req, res, next) => {
             email,
             avatar,
             password,
+            zipCode,
+            phoneNumber,
+            address
         });
 
-        sendToken(seller, 201, res);
+        sendShopToken(seller, 201, res);
 
 
     } catch (error) {
@@ -109,3 +119,54 @@ router.post("/shop/activation", catchAsyncError(async (req, res, next) => {
     }
 }))
 module.exports = router;
+
+
+// login shop
+router.post("/login-shop", catchAsyncError(async (req, res, next) => {
+    console.log("Login request received");
+
+    try {
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+            return next(new ErrorHandler("Please provide the all fields!", 400));
+        }
+
+        const user = await Shop.findOne({ email }).select("+password");
+
+        if (!user) {
+            return next(new ErrorHandler("Shop doesn't exists!", 400));
+        }
+
+        const isPasswordValid = await user.comparePassword(password);
+
+        if (!isPasswordValid) {
+            return next(
+                new ErrorHandler("Please provide the correct information", 400)
+            );
+        }
+
+        sendShopToken(user, 201, res);
+    } catch (error) {
+        return next(new ErrorHandler(error.message, 500));
+    }
+})
+);
+
+//load shop
+router.get("/getSeller", isSeller, catchAsyncError(async (req, res, next) => {
+    try {
+      console.log("seller id: ", req.seller._id);
+      
+        const user = await Shop.findById(req.seller._id);
+        if (!user) {
+            return next(new ErrorHandler("User not found", 404));
+        }
+        res.status(200).json({
+            success: true,
+            user,
+        });
+    } catch (error) {
+        return next(new ErrorHandler(error.message, 500));
+    }
+}));

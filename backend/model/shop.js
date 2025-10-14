@@ -26,7 +26,7 @@ const shopSchema = new mongoose.Schema({
   },
   phoneNumber: {
     type: Number,
-    required: true,
+    required: false,
   },
   role: {
     type: String,
@@ -35,7 +35,7 @@ const shopSchema = new mongoose.Schema({
   avatar: {
     public_id: {
       type: String,
-      required: true,
+      required: false,
     },
     url: {
       type: String,
@@ -44,7 +44,7 @@ const shopSchema = new mongoose.Schema({
   },
   zipCode: {
     type: Number,
-    required: true,
+    required: false,
   },
   
   createdAt: {
@@ -66,7 +66,7 @@ shopSchema.pre("save", async function (next) {
 
 // jwt token
 shopSchema.methods.getJwtToken = function () {
-  return jwt.sign({ id: this._id }, process.env.JWT_SECRET_KEY, {
+  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES,
   });
 };

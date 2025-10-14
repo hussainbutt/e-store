@@ -33,6 +33,9 @@ const ShopCreate = () => {
         formData.append("email", email);
         formData.append("password", password);
         formData.append("file", avatarFile);
+        formData.append("address", address);
+        formData.append("phoneNumber", phoneNumber);
+        formData.append("zipCode", zipCode);
   
         const res = await axios.post(`${server}/shop/create-shop`, formData, {
           headers: {

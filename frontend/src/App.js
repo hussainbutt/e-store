@@ -14,7 +14,9 @@ import {
   FAQPage,
   ProductDetailsPage,
   ProfilePage,
-  ShopCreatePage
+  ShopCreatePage,
+  SellerActivationPage,
+  ShopLoginPage
   
 } from "./routes/Routes.js";
 
@@ -22,7 +24,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Store from "./redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { loadUser } from "./redux/actions/user";
+import { loadSeller, loadUser } from "./redux/actions/user";
 const App = () => {
   
   const dispatch = useDispatch();
@@ -31,6 +33,7 @@ const App = () => {
   
   useEffect(() => {
     dispatch(loadUser());
+    dispatch(loadSeller())
   }, []);
 
   useEffect(() => {
@@ -52,6 +55,10 @@ const App = () => {
               path="/activation/:activation_token"
               element={<ActivationPage />}
             />
+            <Route
+              path="/seller/activation/:activation_token"
+              element={<SellerActivationPage />}
+            />
             <Route path="/products" element={<ProductPage />} />
             <Route path="/product/:id" element={<ProductDetailsPage />} />
             <Route path="/best-selling" element={<BestSellingPage />} />
@@ -62,6 +69,7 @@ const App = () => {
               <ProfilePage />
             </ProtectedRoute>} />
             <Route path="/shop-create" element={<ShopCreatePage />} />
+            <Route path="/shop-login" element={<ShopLoginPage />} />
             
             
           </Routes>
