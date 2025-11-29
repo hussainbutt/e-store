@@ -158,13 +158,13 @@ router.get("/getSeller", isSeller, catchAsyncError(async (req, res, next) => {
     try {
       console.log("seller id: ", req.seller._id);
       
-        const user = await Shop.findById(req.seller._id);
-        if (!user) {
+        const seller = await Shop.findById(req.seller._id);
+        if (!seller) {
             return next(new ErrorHandler("User not found", 404));
         }
         res.status(200).json({
             success: true,
-            user,
+            seller,
         });
     } catch (error) {
         return next(new ErrorHandler(error.message, 500));
